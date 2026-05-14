@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AgroBot - Asistente Agrícola de Guinea Ecuatorial</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+<!-- PANEL LOGIN -->
+<div id="loginPanel">
+    <h1> AgroBot</h1>
+    <h3>Asistente IA para el pequeño agricultor</h3>
+    <input type="text" id="nombre" placeholder="Nombre completo">
+    <input type="text" id="codigo" placeholder="Código de acceso">
+    <select id="rol">
+        <option value="user"> Usuario</option>
+        <option value="admin">Administrador</option>
+    </select>
+    <button id="iniciarSesionBtn">Iniciar Sesión</button>
+    <button id="registrarseBtn">Registrarse</button>
+    <div id="loginMensaje"></div>
+</div>
+
+<!-- PANEL USUARIO -->
+<div id="userPanel" style="display:none;">
+    <div class="header">
+        <h2> AgroBot</h2>
+        <div><span id="userNombre"></span> <button id="logoutUserBtn">Salir</button></div>
+    </div>
+    <div class="chat-area" id="chatMessages">
+        <div class="bot-msg"> ¡Bienvenido! Pregúntame sobre plagas, enfermedades o cultivos.</div>
+    </div>
+    <div class="input-area">
+        <textarea id="userMessage" rows="2" placeholder="Escribe tu consulta..."></textarea>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <input type="text" id="textoAdjunto" placeholder="Texto adicional (opcional)" style="flex:2;">
+            <input type="file" id="imagenAdjunta" accept="image/*" style="flex:1;">
+            <button id="sendMsgBtn">Enviar</button>
+        </div>
+    </div>
+    <div class="historial">
+        <h4>Historial</h4>
+        <ul id="historialLista"><li>No hay consultas</li></ul>
+    </div>
+</div>
+
+<!-- PANEL ADMIN -->
+<div id="adminPanel" style="display:none;">
+    <div class="header">
+        <h2> Panel Admin - AgroBot</h2>
+        <div><span id="adminNombre"></span> <button id="logoutAdminBtn">Salir</button></div>
+    </div>
+    
+    <div class="admin-tabs">
+        <button class="tab-btn active" data-tab="usuarios"> Usuarios</button>
+        <button class="tab-btn" data-tab="respuestas"> Respuestas</button>
+        <button class="tab-btn" data-tab="consultas">Consultas</button>
+        <button class="tab-btn" data-tab="cultivos">Cultivos</button>
+        <button class="tab-btn" data-tab="plagas">Plagas</button>
+        <button class="tab-btn" data-tab="consejos">Consejos</button>
+        <button class="tab-btn" data-tab="logs">Logs</button>
+    </div>
+    
+    <div id="tab-usuarios" class="tab-content active">
+        <h3>Usuarios</h3>
+        <div class="form-row"><input type="text" id="user_nombre" placeholder="Nombre"><input type="text" id="user_codigo" placeholder="Código"><select id="user_rol"><option value="user">Usuario</option><option value="admin">Admin</option></select><button id="crearUsuarioBtn">Crear</button></div>
+        <table id="tablaUsuarios"><thead><tr><th>ID</th><th>Nombre</th><th>Código</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead><tbody></tbody></table>
+    </div>
+    
+    <div id="tab-respuestas" class="tab-content">
+        <h3>Respuestas</h3>
+        <div class="form-row"><input type="text" id="resp_palabra" placeholder="Palabra clave"><textarea id="resp_texto" placeholder="Respuesta"></textarea><select id="resp_idioma"><option value="español">Español</option><option value="fang">Fang</option><option value="bubi">Bubi</option></select><button id="crearRespuestaBtn">Guardar</button></div>
+        <table id="tablaRespuestas"><thead><tr><th>ID</th><th>Palabra</th><th>Respuesta</th><th>Idioma</th><th>Acciones</th></tr></thead><tbody></tbody></table>
+    </div>
+    
+    <div id="tab-consultas" class="tab-content">
+        <h3>Consultas</h3>
+        <table id="tablaConsultas"><thead><tr><th>ID</th><th>Usuario</th><th>Consulta</th><th>Respuesta</th><th>Fecha</th><th>Imagen</th></tr></thead><tbody></tbody></table>
+    </div>
+    
+    <div id="tab-cultivos" class="tab-content">
+        <h3>Cultivos</h3>
+        <div class="form-row"><input type="text" id="cult_nombre" placeholder="Nombre"><input type="text" id="cult_cientifico" placeholder="Nombre científico"><textarea id="cult_desc" placeholder="Descripción"></textarea><button id="crearCultivoBtn">Crear</button></div>
+        <table id="tablaCultivos"><thead><tr><th>ID</th><th>Nombre</th><th>Nombre científico</th><th>Descripción</th><th>Acciones</th></tr></thead><tbody></tbody></table>
+    </div>
+    
+    <div id="tab-plagas" class="tab-content">
+        <h3>Plagas/Enfermedades</h3>
+        <div class="form-row"><input type="text" id="plag_nombre" placeholder="Nombre"><select id="plag_tipo"><option value="plaga">Plaga</option><option value="enfermedad">Enfermedad</option></select><input type="text" id="plag_cultivo" placeholder="Cultivo afectado"><textarea id="plag_sintomas" placeholder="Síntomas"></textarea><textarea id="plag_tratamiento" placeholder="Tratamiento"></textarea><button id="crearPlagaBtn">Crear</button></div>
+        <table id="tablaPlagas"><thead><tr><th>ID</th><th>Nombre</th><th>Tipo</th><th>Cultivo</th><th>Síntomas</th><th>Tratamiento</th><th>Acciones</th></tr></thead><tbody></tbody></table>
+    </div>
+    
+    <div id="tab-consejos" class="tab-content">
+        <h3>Consejos</h3>
+        <div class="form-row"><input type="text" id="cons_titulo" placeholder="Título"><textarea id="cons_contenido" placeholder="Contenido"></textarea><select id="cons_categoria"><option value="general">General</option><option value="abono">Abono</option><option value="riego">Riego</option></select><button id="crearConsejoBtn">Crear</button></div>
+        <table id="tablaConsejos"><thead><tr><th>ID</th><th>Título</th><th>Contenido</th><th>Categoría</th><th>Acciones</th></tr></thead><tbody></tbody></table>
+    </div>
+    
+    <div id="tab-logs" class="tab-content">
+        <h3>Logs del sistema</h3>
+        <table id="tablaLogs"><thead><tr><th>ID</th><th>Usuario</th><th>Acción</th><th>Descripción</th><th>Fecha</th></tr></thead><tbody></tbody></table>
+    </div>
+</div>
+
+<script src="../controlador/app.js"></script>
+</body>
+</html>
